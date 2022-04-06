@@ -6,9 +6,10 @@
 void rec(int n, unsigned short *seq) {
     unsigned short tmp;
     for (int i = 0; i < n; i++) {
-        tmp = seq[10] << 1;
         if (tmp & 0x8000) {
-            tmp ^= 0x100B;
+            tmp = (seq[10] << 1) ^ 0x100B;
+        } else {
+            tmp = seq[10] << 1;
         }
         tmp ^= seq[0];
         for (int j = 0; j < 31; j++) {
@@ -21,9 +22,10 @@ void rec(int n, unsigned short *seq) {
 int rec1(int n, unsigned short *seq, int currentIndex) {
     unsigned short tmp;
     for (int i = 0; i < n; i++) {
-        tmp = seq[(10 + currentIndex) & 31] << 1;
         if (tmp & 0x8000) {
-            tmp ^= 0x100B;
+            tmp = (seq[(10 + currentIndex) & 31] << 1) ^ 0x100B;
+        } else {
+            tmp = seq[(10 + currentIndex) & 31] << 1;
         }
         tmp ^= seq[currentIndex & 31];
         seq[(currentIndex & 31)] = tmp;
@@ -41,10 +43,9 @@ int main() {
     }
 
     printf("\n<<<<<Method 1>>>>>\n");
-    rec(63, seq);
-    for (int i = 64; i < 96; i++) {
-        rec(1, seq);
-        printf("Element %d: %hu\n", i, seq[31]);
+    rec(95, seq);
+    for (int i = 0; i < 32; i++) {
+        printf("Element %d: %hu\n", i + 64, seq[i]);
     }
 
     printf("\n<<<<<Method 2>>>>>\n");
